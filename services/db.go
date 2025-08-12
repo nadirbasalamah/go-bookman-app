@@ -10,8 +10,8 @@ type BookDBService struct {
 	db *gorm.DB
 }
 
-func InitBookDBService(db *gorm.DB) BookService {
-	return &BookDBService{
+func InitBookDBService(db *gorm.DB) BookDBService {
+	return BookDBService{
 		db: db,
 	}
 }
@@ -36,7 +36,7 @@ func (b *BookDBService) GetBookByID(id string) (models.Book, error) {
 	return book, nil
 }
 
-func (b *BookDBService) CreateBook(book models.Book) (models.Book, error) {
+func (b *BookDBService) InsertBook(book models.Book) (models.Book, error) {
 	if err := b.db.Create(&book).Error; err != nil {
 		return models.Book{}, err
 	}
@@ -48,7 +48,7 @@ func (b *BookDBService) CreateBook(book models.Book) (models.Book, error) {
 	return book, nil
 }
 
-func (b *BookDBService) CreateBatchBook(books []models.Book) error {
+func (b *BookDBService) InsertBatchBook(books []models.Book) error {
 	if err := b.db.Create(&books).Error; err != nil {
 		return err
 	}

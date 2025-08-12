@@ -2,18 +2,14 @@ package storage
 
 import (
 	"fmt"
+	"go-bookman-app/models"
 	"go-bookman-app/utils"
-	"log"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-var DB *gorm.DB
-
-func ConnectDB() {
-	var err error
-
+func ConnectDB() (*gorm.DB, error) {
 	dsn := fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
 		utils.GetConfig("DB_HOST"),
@@ -23,11 +19,15 @@ func ConnectDB() {
 		utils.GetConfig("DB_PORT"),
 	)
 
-	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
 	if err != nil {
-		log.Fatalf("failed to connect DB: %v", err)
+		return nil, err
 	}
 
-	log.Println("DB connected")
+	if err := db.AutoMigrate(&models.Book{}); err != nil {
+		return nil, err
+	}
+
+	return db, nil
 }
