@@ -7,8 +7,8 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func InitRoutes(e *echo.Echo, dbService services.BookDBService, cacheService services.BookCacheService) {
-	bookController := controllers.InitBookController(dbService, cacheService)
+func InitRoutes(e *echo.Echo, bookService services.BookService) {
+	bookController := controllers.InitBookController(bookService)
 
 	bookRoutes := e.Group("/api/v1")
 

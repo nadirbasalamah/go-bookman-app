@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"go-bookman-app/models"
+	"log"
 	"time"
 
 	"github.com/redis/go-redis/v9"
@@ -33,6 +34,8 @@ func (b *BookCacheService) GetAllBooks() ([]models.Book, error) {
 		return nil, err
 	}
 
+	log.Println("fetch from cache")
+
 	return books, nil
 }
 
@@ -50,6 +53,8 @@ func (b *BookCacheService) GetBookByID(id string) (models.Book, error) {
 	if err := json.Unmarshal([]byte(val), &book); err != nil {
 		return models.Book{}, err
 	}
+
+	log.Println("fetch from cache")
 
 	return book, nil
 }
@@ -71,6 +76,8 @@ func (b *BookCacheService) InsertBook(book models.Book) (models.Book, error) {
 		return models.Book{}, err
 	}
 
+	log.Println("inserted to cache")
+
 	return book, nil
 }
 
@@ -88,6 +95,8 @@ func (b *BookCacheService) InsertBatchBook(books []models.Book) error {
 	if res.Err() != nil {
 		return err
 	}
+
+	log.Println("books are inserted to the cache")
 
 	return nil
 }
