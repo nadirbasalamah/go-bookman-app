@@ -1,0 +1,45 @@
+services:
+  api-service:
+    container_name: api
+    environment:
+      - APP_MODE=${APP_MODE}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - REDIS_ADDRESS=${REDIS_ADDRESS}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    build: .
+    ports:
+      - 1323:1323
+    restart: on-failure
+    networks:
+      - my-network
+    depends_on:
+      - db-service
+      - cache-service
+
+  db-service:
+    container_name: db
+    image: postgres:latest
+    environment:
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    ports:
+      - 5432
+    networks:
+      - my-network
+    volumes:
+      - ./postgres:/docker-entrypoint-initdb.d
+
+  cache-service:
+    container_name: cache
+    image: redis:latest
+    ports:
+      - 6379
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    driver: bridge
