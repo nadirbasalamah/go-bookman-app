@@ -31,6 +31,8 @@ curl -XPOST -H "Content-type: application/json" -d '{"title":"algorithm","descri
 
 The application can be started using Docker Compose.
 
+> In the `.env` file, set `APP_MODE` to `prod`
+
 1. Make sure to modify the database and Redis host based on the service name.
 
 2. Start the application.
